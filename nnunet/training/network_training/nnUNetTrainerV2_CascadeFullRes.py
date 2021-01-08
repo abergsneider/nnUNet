@@ -36,7 +36,7 @@ from torch import nn
 
 matplotlib.use("agg")
 
-
+# [AB] Imported to "nnUNet_train" command
 class nnUNetTrainerV2CascadeFullRes(nnUNetTrainerV2):
     def __init__(self, plans_file, fold, output_folder=None, dataset_directory=None, batch_dice=True, stage=None,
                  unpack_data=True, deterministic=True, previous_trainer="nnUNetTrainerV2", fp16=False):

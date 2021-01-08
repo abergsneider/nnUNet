@@ -32,7 +32,7 @@ import shutil
 
 matplotlib.use("agg")
 
-
+# [AB] Imported to "nnUNet_train" command
 class nnUNetTrainerCascadeFullRes(nnUNetTrainer):
     def __init__(self, plans_file, fold, output_folder=None, dataset_directory=None, batch_dice=True, stage=None,
                  unpack_data=True, deterministic=True, previous_trainer="nnUNetTrainer", fp16=False):
