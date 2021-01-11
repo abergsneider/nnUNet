@@ -24,7 +24,7 @@ from skimage.morphology import label
 from collections import OrderedDict
 
 
-class DatasetAnalyzer(object):
+class DatasetAnalyzer(object):      # [AB] Inferred Parameters 
     def __init__(self, folder_with_cropped_data, overwrite=True, num_processes=default_num_threads):
         """
         :param folder_with_cropped_data:

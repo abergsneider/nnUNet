@@ -21,7 +21,7 @@ from nnunet.network_architecture.generic_UNet import Generic_UNet
 from nnunet.paths import *
 
 
-class ExperimentPlanner3D_v21(ExperimentPlanner):
+class ExperimentPlanner3D_v21(ExperimentPlanner):       # [AB] Default Class for 3D U-Net
     """
     Combines ExperimentPlannerPoolBasedOnSpacing and ExperimentPlannerTargetSpacingForAnisoAxis
 

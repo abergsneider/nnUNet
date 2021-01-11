@@ -20,7 +20,7 @@ from nnunet.paths import *
 import numpy as np
 
 
-class ExperimentPlanner2D_v21(ExperimentPlanner2D):
+class ExperimentPlanner2D_v21(ExperimentPlanner2D):     # [AB] Default Class for 2D U-Net
     def __init__(self, folder_with_cropped_data, preprocessed_output_folder):
         super(ExperimentPlanner2D_v21, self).__init__(folder_with_cropped_data, preprocessed_output_folder)
         self.data_identifier = "nnUNetData_plans_v2.1_2D"

@@ -13,10 +13,11 @@
 #    limitations under the License.
 
 
-import argparse
+import argparse # [AB] I believe this is for -h command
 from batchgenerators.utilities.file_and_folder_operations import *
 from nnunet.run.default_configuration import get_default_configuration
 from nnunet.paths import default_plans_identifier
+# [AB] training classes:
 from nnunet.training.cascade_stuff.predict_next_stage import predict_next_stage
 from nnunet.training.network_training.nnUNetTrainer import nnUNetTrainer
 from nnunet.training.network_training.nnUNetTrainerCascadeFullRes import nnUNetTrainerCascadeFullRes
@@ -25,6 +26,8 @@ from nnunet.utilities.task_name_id_conversion import convert_id_to_task_name
 
 
 def main():
+    #[AB] HelpTexts & taking arguments:    ------------------------------------------------------------------------
+    #[AB] HelpTexts (end): ----------------------------------------------------------------------------------------
     parser = argparse.ArgumentParser()
     parser.add_argument("network")
     parser.add_argument("network_trainer")
@@ -38,8 +41,8 @@ def main():
                         default=default_plans_identifier, required=False)
     parser.add_argument("--use_compressed_data", default=False, action="store_true",
                         help="If you set use_compressed_data, the training cases will not be decompressed. Reading compressed data "
-                             "is much more CPU and RAM intensive and should only be used if you know what you are "
-                             "doing", required=False)
+                             "is much more CPU and RAM intensi ve and should only be used if you know what you are "
+                             "doing", required=False)   # [AB] so don't f with this..
     parser.add_argument("--deterministic",
                         help="Makes training deterministic, but reduces training speed substantially. I (Fabian) think "
                              "this is not necessary. Deterministic training will make you overfit to some random seed. "
@@ -72,30 +75,36 @@ def main():
     # parser.add_argument("--force_separate_z", required=False, default="None", type=str,
     #                     help="force_separate_z resampling. Can be None, True or False. Testing purpose only. Hands off")
 
+    #[AB] HelpTexts (end): ----------------------------------------------------------------------------------------
+
+
+    # [AB] Taking data from the command by user
+    # [AB] e.g. "nnUNet_train 3d_fullres nnUNetTrainerV2 121 0 --npz"
     args = parser.parse_args()
 
-    task = args.task
-    fold = args.fold
-    network = args.network
-    network_trainer = args.network_trainer
-    validation_only = args.validation_only
-    plans_identifier = args.p
-    find_lr = args.find_lr
+    task = args.task                        # [AB] e.g. "121"
+    fold = args.fold                        # [AB] e.g. "0"
+    network = args.network                  # [AB] e.g. "3d_fullres"
+    network_trainer = args.network_trainer  # [AB] e.g. "nnUNetTrainerV2"
+    validation_only = args.validation_only  # [AB] Used for running validation
+    plans_identifier = args.p               # [AB] IF CUSTOM EXPERIMENT PLANNER     <------
+    find_lr = args.find_lr                  # [AB] not used..
 
-    use_compressed_data = args.use_compressed_data
+    use_compressed_data = args.use_compressed_data      # [AB] yep no, read comment above
     decompress_data = not use_compressed_data
 
-    deterministic = args.deterministic
-    valbest = args.valbest
+    deterministic = args.deterministic      # [AB] Don't use it, Fabian doesn't recomend
+    valbest = args.valbest                  # [AB] Neither this one
 
-    fp32 = args.fp32
+    fp32 = args.fp32                        # [AB] Neither this one
     run_mixed_precision = not fp32
 
-    val_folder = args.val_folder
+    val_folder = args.val_folder            # [AB] No need to use for most people per Fabian..
     # interp_order = args.interp_order
     # interp_order_z = args.interp_order_z
     # force_separate_z = args.force_separate_z
 
+    # [AB] below converts between "121" or something like "Task_121_Kidney"
     if not task.startswith("Task"):
         task_id = int(task)
         task = convert_id_to_task_name(task_id)
@@ -103,7 +112,7 @@ def main():
     if fold == 'all':
         pass
     else:
-        fold = int(fold)
+        fold = int(fold)    # [AB] sets the fold number given e.g. [0, 1, 2, 3, 4]
 
     # if force_separate_z == "None":
     #     force_separate_z = None
@@ -114,21 +123,28 @@ def main():
     # else:
     #     raise ValueError("force_separate_z must be None, True or False. Given: %s" % force_separate_z)
 
+    # [AB] "\" used for multi-line string
     plans_file, output_folder_name, dataset_directory, batch_dice, stage, \
-    trainer_class = get_default_configuration(network, task, network_trainer, plans_identifier)
+    trainer_class = get_default_configuration(network, task, network_trainer, plans_identifier)     
 
+    # [AB] 
     if trainer_class is None:
         raise RuntimeError("Could not find trainer class in nnunet.training.network_training")
 
+    # [AB] DEBUGGING
+    # [AB] "assert" keyword lets you test if a condition in your code returns True, if not, the program will raise an AssertionError.
+    # [AB] "issubclass" check if class argument (1st argument) is a subclass of classinfo class (2nd argument)
     if network == "3d_cascade_fullres":
         assert issubclass(trainer_class, (nnUNetTrainerCascadeFullRes, nnUNetTrainerV2CascadeFullRes)), \
             "If running 3d_cascade_fullres then your " \
             "trainer class must be derived from " \
             "nnUNetTrainerCascadeFullRes"
     else:
+        # [AB] e.g. trainer_class = "nnUNetTrainerV2"
         assert issubclass(trainer_class,
                           nnUNetTrainer), "network_trainer was found but is not derived from nnUNetTrainer"
-
+    # [AB] CHECK how this is imported. This is an object CHECK  <--------------------
+    # [AB] Research about reflection coding
     trainer = trainer_class(plans_file, fold, output_folder=output_folder_name, dataset_directory=dataset_directory,
                             batch_dice=batch_dice, stage=stage, unpack_data=decompress_data,
                             deterministic=deterministic,
