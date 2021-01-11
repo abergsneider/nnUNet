@@ -25,9 +25,9 @@ from nnunet.training.network_training.nnUNetTrainerV2_CascadeFullRes import nnUN
 from nnunet.utilities.task_name_id_conversion import convert_id_to_task_name
 
 
+# [AB] FIRST to run after command 'nnUNet_train'
 def main():
-    #[AB] HelpTexts & taking arguments:    ------------------------------------------------------------------------
-    #[AB] HelpTexts (end): ----------------------------------------------------------------------------------------
+    #[AB] HelpTexts & Arguments:    ------------------------------------------------------------------------
     parser = argparse.ArgumentParser()
     parser.add_argument("network")
     parser.add_argument("network_trainer")
@@ -127,7 +127,7 @@ def main():
     plans_file, output_folder_name, dataset_directory, batch_dice, stage, \
     trainer_class = get_default_configuration(network, task, network_trainer, plans_identifier)     
 
-    # [AB] 
+
     if trainer_class is None:
         raise RuntimeError("Could not find trainer class in nnunet.training.network_training")
 
@@ -145,6 +145,7 @@ def main():
                           nnUNetTrainer), "network_trainer was found but is not derived from nnUNetTrainer"
     # [AB] CHECK how this is imported. This is an object CHECK  <--------------------
     # [AB] Research about reflection coding
+    # [AB] This is like instantiating an object from a class dynamically. 'trainer_class' can change depending on user input
     trainer = trainer_class(plans_file, fold, output_folder=output_folder_name, dataset_directory=dataset_directory,
                             batch_dice=batch_dice, stage=stage, unpack_data=decompress_data,
                             deterministic=deterministic,
