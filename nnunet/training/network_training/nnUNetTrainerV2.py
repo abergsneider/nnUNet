@@ -52,6 +52,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
 
         self.pin_memory = True
 
+# [AB] Also on nnUnNetTrainer
     def initialize(self, training=True, force_load_plans=False):
         """
         - replaced get_default_augmentation with get_moreDA_augmentation
@@ -125,6 +126,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
             self.print_to_log_file('self.was_initialized is True, not running self.initialize again')
         self.was_initialized = True
 
+# [AB] Also on nnUnNetTrainer
     def initialize_network(self):
         """
         - momentum 0.99
@@ -160,12 +162,14 @@ class nnUNetTrainerV2(nnUNetTrainer):
             self.network.cuda()
         self.network.inference_apply_nonlin = softmax_helper
 
+# [AB] Also on nnUnNetTrainer
     def initialize_optimizer_and_scheduler(self):
         assert self.network is not None, "self.initialize_network must be called first"
         self.optimizer = torch.optim.SGD(self.network.parameters(), self.initial_lr, weight_decay=self.weight_decay,
                                          momentum=0.99, nesterov=True)
         self.lr_scheduler = None
 
+# [AB] Also on nnUnNetTrainer
     def run_online_evaluation(self, output, target):
         """
         due to deep supervision the return value and the reference are now lists of tensors. We only need the full
@@ -178,6 +182,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
         output = output[0]
         return super().run_online_evaluation(output, target)
 
+# [AB] Also on nnUnNetTrainer
     def validate(self, do_mirroring: bool = True, use_sliding_window: bool = True,
                  step_size: float = 0.5, save_softmax: bool = True, use_gaussian: bool = True, overwrite: bool = True,
                  validation_folder_name: str = 'validation_raw', debug: bool = False, all_in_gpu: bool = False,
@@ -193,6 +198,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
         self.network.do_ds = ds
         return ret
 
+# [AB] Also on nnUnNetTrainer
     def predict_preprocessed_data_return_seg_and_softmax(self, data: np.ndarray, do_mirroring: bool = True,
                                                          mirror_axes: Tuple[int] = None,
                                                          use_sliding_window: bool = True, step_size: float = 0.5,
@@ -318,6 +324,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
         for i in val_keys:
             self.dataset_val[i] = self.dataset[i]
 
+# [AB] Also on nnUnNetTrainer
     def setup_DA_params(self):
         """
         - we increase roation angle from [-15, 15] to [-30, 30]
@@ -409,7 +416,8 @@ class nnUNetTrainerV2(nnUNetTrainer):
                                        "0.95 and network weights have been reinitialized")
         return continue_training
 
-    def run_training(self):
+# [AB] Also on nnUnNetTrainer
+    def run_training(self):         # [AB] RUNS THE TRAINING <---------------------------------------------------------- !!!!!
         """
         if we run with -c then we need to set the correct lr for the first epoch, otherwise it will run the first
         continued epoch with self.initial_lr

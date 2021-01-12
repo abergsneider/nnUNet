@@ -15,7 +15,7 @@
 
 import argparse # [AB] I believe this is for -h command
 from batchgenerators.utilities.file_and_folder_operations import *
-from nnunet.run.default_configuration import get_default_configuration
+from nnunet.run.default_configuration import get_default_configuration  # [AB] Imported from same folder as this file
 from nnunet.paths import default_plans_identifier
 # [AB] training classes:
 from nnunet.training.cascade_stuff.predict_next_stage import predict_next_stage
@@ -143,6 +143,9 @@ def main():
         # [AB] e.g. trainer_class = "nnUNetTrainerV2"
         assert issubclass(trainer_class,
                           nnUNetTrainer), "network_trainer was found but is not derived from nnUNetTrainer"
+    
+    # [AB] ---------------------------------------- Trainer ----------------------------------------
+
     # [AB] CHECK how this is imported. This is an object CHECK  <--------------------
     # [AB] Research about reflection coding
     # [AB] This is like instantiating an object from a class dynamically. 'trainer_class' can change depending on user input
@@ -159,14 +162,14 @@ def main():
 
     trainer.initialize(not validation_only)
 
-    if find_lr:
+    if find_lr:             # [AB] Not used
         trainer.find_lr()
     else:
-        if not validation_only:
-            if args.continue_training:
+        if not validation_only:                     # [AB] if we're not trying to run validation only
+            if args.continue_training:              # [AB] if '-c' has been passed to continue training]
                 trainer.load_latest_checkpoint()
-            trainer.run_training()
-        else:
+            trainer.run_training()                  # [AB] RUN TRAINING <------------------------------------------ !!!!!
+        else:                                       # [AB] if we ARE trying to run validation only
             if valbest:
                 trainer.load_best_checkpoint(train=False)
             else:
