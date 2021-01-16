@@ -441,7 +441,7 @@ class NetworkTrainer(object):
                     train_losses_epoch.append(l)
 
             self.all_tr_losses.append(np.mean(train_losses_epoch))
-            self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])
+            self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])    # [AB] Prints to Terminal Output! <-------
 
             with torch.no_grad():
                 # validation with train=False
@@ -451,7 +451,7 @@ class NetworkTrainer(object):
                     l = self.run_iteration(self.val_gen, False, True)
                     val_losses.append(l)
                 self.all_val_losses.append(np.mean(val_losses))
-                self.print_to_log_file("validation loss: %.4f" % self.all_val_losses[-1])
+                self.print_to_log_file("validation loss: %.4f" % self.all_val_losses[-1]) # [AB] Prints to Terminal Output! <-------
 
                 if self.also_val_in_tr_mode:
                     self.network.train()

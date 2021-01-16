@@ -704,7 +704,7 @@ class nnUNetTrainer(NetworkTrainer):
                                if not np.isnan(i)]
         self.all_val_eval_metrics.append(np.mean(global_dc_per_class))
 
-        self.print_to_log_file("Average global foreground Dice:", str(global_dc_per_class))
+        self.print_to_log_file("Average global foreground Dice:", str(global_dc_per_class))     # [AB] Prints to Terminal Output! <----
         self.print_to_log_file("(interpret this as an estimate for the Dice of the different classes. This is not "
                                "exact.)")
 
