@@ -184,7 +184,7 @@ class NetworkTrainer(object):
         for i in val_keys:
             self.dataset_val[i] = self.dataset[i]
 
-    def plot_progress(self):
+    def plot_progress(self):                # [AB] PLOTTING THE LOSS GRAPH!
         """
         Should probably by improved
         :return:
@@ -423,7 +423,7 @@ class NetworkTrainer(object):
             epoch_start_time = time()
             train_losses_epoch = []
 
-            # train one epoch
+            # train one epoch                                       # [AB] Training 1 Epoch!
             self.network.train()
 
             if self.use_progress_bar:
@@ -434,13 +434,13 @@ class NetworkTrainer(object):
                         l = self.run_iteration(self.tr_gen, True)
 
                         tbar.set_postfix(loss=l)
-                        train_losses_epoch.append(l)
+                        train_losses_epoch.append(l)            # [AB] Appends loss to loss list
             else:
                 for _ in range(self.num_batches_per_epoch):
                     l = self.run_iteration(self.tr_gen, True)
                     train_losses_epoch.append(l)
 
-            self.all_tr_losses.append(np.mean(train_losses_epoch))
+            self.all_tr_losses.append(np.mean(train_losses_epoch))                  # [AB] Calculates "train loss"
             self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])    # [AB] Prints to Terminal Output! <-------
 
             with torch.no_grad():
@@ -474,7 +474,7 @@ class NetworkTrainer(object):
                 break
 
             self.epoch += 1
-            self.print_to_log_file("This epoch took %f s\n" % (epoch_end_time - epoch_start_time))
+            self.print_to_log_file("This epoch took %f s\n" % (epoch_end_time - epoch_start_time)) # [AB] Prints to Terminal Output! <--
 
         self.epoch -= 1  # if we don't do this we can get a problem with loading model_final_checkpoint.
 
