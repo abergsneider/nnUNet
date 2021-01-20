@@ -423,7 +423,7 @@ class NetworkTrainer(object):
             epoch_start_time = time()
             train_losses_epoch = []
 
-            # train one epoch                                       # [AB] Training 1 Epoch!
+            # train one epoch                                           # [AB] Training 1 Epoch!
             self.network.train()
 
             if self.use_progress_bar:
@@ -431,10 +431,10 @@ class NetworkTrainer(object):
                     for b in tbar:
                         tbar.set_description("Epoch {}/{}".format(self.epoch+1, self.max_num_epochs))
 
-                        l = self.run_iteration(self.tr_gen, True)
+                        l = self.run_iteration(self.tr_gen, True)       # [AB] 'run_iteration' is a function
 
                         tbar.set_postfix(loss=l)
-                        train_losses_epoch.append(l)            # [AB] Appends loss to loss list
+                        train_losses_epoch.append(l)                    # [AB] Appends loss to loss-list
             else:
                 for _ in range(self.num_batches_per_epoch):
                     l = self.run_iteration(self.tr_gen, True)
@@ -626,7 +626,7 @@ class NetworkTrainer(object):
             with autocast():
                 output = self.network(data)
                 del data
-                l = self.loss(output, target)
+                l = self.loss(output, target)       # [AB] Calculating the loss
 
             if do_backprop:
                 self.amp_grad_scaler.scale(l).backward()
@@ -646,7 +646,7 @@ class NetworkTrainer(object):
 
         del target
 
-        return l.detach().cpu().numpy()
+        return l.detach().cpu().numpy()         # [AB] CUDA variable part of differentiable comp. graph
 
     def run_online_evaluation(self, *args, **kwargs):
         """
