@@ -21,7 +21,7 @@ from torch.cuda.amp import autocast
 from nnunet.training.learning_rate.poly_lr import poly_lr                                       # [AB] polyLR reducing training schedule
 from batchgenerators.utilities.file_and_folder_operations import *
 
-class abergTrainer_5epochs(nnUNetTrainerV2):
+class abergTrainer(nnUNetTrainerV2):
 
 
     def __init__(self, plans_file, fold, output_folder=None, dataset_directory=None, batch_dice=True, stage=None,
