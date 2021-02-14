@@ -1,6 +1,6 @@
 #    [AB] Andres Bergsneider Modifications
 
-from nnunet.training.network_training.nnUNetTrainerV2 import nnUNetTrainerV2
+from workspace.nnUNet.nnunet.training.network_training.nnUNetTrainerV2 import nnUNetTrainerV2
 
 class abergTrainer_5epochs(nnUNetTrainerV2):
 
