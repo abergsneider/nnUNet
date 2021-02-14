@@ -1,5 +1,4 @@
 #    [AB] Andres Bergsneider Modifications
-'''
 from typing import Tuple
 import numpy as np
 import torch
@@ -20,5 +19,3 @@ class abergTrainer_5epochs(nnUNetTrainerV2):
         super().__init__(plans_file, fold, output_folder, dataset_directory, batch_dice, stage, unpack_data,
                          deterministic, fp16)
         self.max_num_epochs = 5     # [AB] Limiting to 5
-
-        '''
